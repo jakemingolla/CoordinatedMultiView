@@ -44,10 +44,10 @@ public class PieChartManager {
     }
 
     if (currentLowerBound.equals(currentUpperBound)) {
-      fill(255, 0, 0);
+      fill(0, 0, 255);
       text("Funding by Sponsor in " + currentLowerBound, x + margin, y + margin);
     } else {
-      fill(255, 0, 0);
+      fill(0, 0, 255);
       text("Funding by Sponsor from " + currentLowerBound + " - " + currentUpperBound, x + margin, y + margin);
     }
     pieChart.render(currentNames, currentPercentages);

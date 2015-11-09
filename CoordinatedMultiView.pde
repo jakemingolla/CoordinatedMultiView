@@ -34,6 +34,8 @@ Integer leftY;
 Integer leftW;
 Integer leftH;
 
+String DISPLAYED_DEPARTMENT = "";
+
 void setup() {
   size(displayWidth, (int)(displayHeight * 0.9));
   println(width + " " + height);
@@ -64,7 +66,7 @@ void setup() {
   //  }
   //  println(dataPoints.size());
   dataManager = new DataManager(dataPoints);
-  dataManager.getTimelineData();
+  dataManager.getRibbonList();
   pieChartManager = new PieChartManager(dataManager, rightX, rightY, rightW, rightH);
   timelineManager = new TimelineManager(dataManager, topX, topY, topW, topH);
 
@@ -92,6 +94,7 @@ void draw() {
   Integer lowerBound = timelineManager.getLowerBoundYear();
   Integer upperBound = timelineManager.getUpperBoundYear();
   pieChartManager.render(lowerBound, upperBound);
+  loadPixels();
 }
 
 void parse() {
@@ -106,6 +109,15 @@ void parse() {
     data.year = parseInt(currLine[3]);
     data.funding = parseInt(currLine[4]);
     dataPoints.add(data);
+  }
+}
+
+void mouseClicked() {
+  final color c = pixels[mouseY*width + mouseX];
+  println(hue(c) + "\t" + saturation(c)+ "\t" + brightness(c) + "r = " + red(c) + ", g = " + green(c) + ", b = " + blue(c));
+  if (mouseX > topX && mouseX < topX + topW && mouseY > topY && mouseY < topY + topH) {
+    DISPLAYED_DEPARTMENT = timelineManager.ribbonManager.getDepartmentByColor(c);
+    println(DISPLAYED_DEPARTMENT);
   }
 }
 

@@ -20,13 +20,20 @@ public class DataManager {
   // years -> total
   Map<Integer, Integer> subTotalByYear;
 
-  Integer grandTotal;
+  // Ribbon info
+  List<String> disciplineList;
+
+  // Ribbon info
+  Map<String, List<String>> departmentsByDiscipline;
+
+    Integer grandTotal;
 
   DataManager(List<Data> rawData) {
     this.rawData = rawData;
     donationsByYear = new HashMap<Integer, Map<String, Integer>>();
     subTotalByYear = new HashMap<Integer, Integer>();
     yearsInOrder = new ArrayList<Integer>();
+    disciplineList = new ArrayList<String>();
 
     for (Data d : rawData) {
       Map<String, Integer> map = donationsByYear.get(d.year);
@@ -46,11 +53,15 @@ public class DataManager {
       if (!yearExists(d.year)) {
         yearsInOrder.add(d.year);
       }
+
+      if (!disciplineExists(d.discipline)) {
+        disciplineList.add(d.discipline);
+      }
     }
 
     Collections.sort(yearsInOrder);
 
-    Map<String, List<String>> departmentsByDiscipline = new HashMap<String, List<String>>();
+    departmentsByDiscipline = new HashMap<String, List<String>>();
     for (Data d : rawData) {
 
       List<String> l = departmentsByDiscipline.get(d.discipline);
@@ -91,7 +102,7 @@ public class DataManager {
           Integer val = findValue(year, discipline, department);
           ydbd.addValue(department, val);
           grandTotal += val;
-          subTotal += val;
+          subTotal += float(val);
         }
         l.add(ydbd);
       }
@@ -115,7 +126,7 @@ public class DataManager {
      */
   }
 
-  public List<Ribbon> getTimelineData() {
+  public List<Ribbon> getRibbonList() {
     List<Ribbon> ribbonList = new ArrayList<Ribbon>();
     for (List<YearlyDonationsByDiscipline> l : donationsByYearByDiscipline) {
       for (YearlyDonationsByDiscipline ydbd : l) {
@@ -145,18 +156,26 @@ public class DataManager {
       }
     }
 
-    for (Ribbon ribbon : ribbonList) {
-      println("discipline = " + ribbon.discipline + ", department = " + ribbon.department + " {");
-      int i;
-      int len = ribbon.years.size();
-      for (i = 0; i < len; i++) {
-        Integer year = ribbon.years.get(i);
-        Float percentage = ribbon.percentages.get(i);
-        println("      year = " + year + ", percentage = " + percentage * 100);
-      }
-      println("}");
-    }
+//    for (Ribbon ribbon : ribbonList) {
+//      println("discipline = " + ribbon.discipline + ", department = " + ribbon.department + " {");
+//      int i;
+//      int len = ribbon.years.size();
+//      for (i = 0; i < len; i++) {
+//        Integer year = ribbon.years.get(i);
+//        Float percentage = ribbon.percentages.get(i);
+//        println("      year = " + year + ", percentage = " + percentage * 100);
+//      }
+//      println("}");
+//    }
     return ribbonList;
+  }
+
+  public Map<String, List<String>> getDepartmentsByDiscipline() {
+    return departmentsByDiscipline;
+  }
+
+  public List<String> getDisciplineList() {
+    return disciplineList;
   }
 
   public Integer getGrandTotal() {
@@ -205,6 +224,15 @@ public class DataManager {
   public Boolean yearExists(Integer query) {
     for (Integer year : yearsInOrder) {
       if (year.equals(query)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public Boolean disciplineExists(String query) {
+    for (String discipline : disciplineList) {
+      if (discipline.equals(query)) {
         return true;
       }
     }

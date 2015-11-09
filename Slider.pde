@@ -49,7 +49,7 @@ public class Slider {
 
   public Boolean intersect() {
     if ((mouseX < currentX + SLIDER_R && mouseX > currentX - SLIDER_R) &&
-      (mouseY < y + h && mouseY > y)) {
+      (mouseY < y + (h * 1.10) && mouseY > (y - (h * 0.10)))) {
       return true;
     } else {
       return false;

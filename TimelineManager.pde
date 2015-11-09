@@ -9,6 +9,8 @@ public class TimelineManager {
   Slider leftSlider;
   Slider rightSlider;
   
+  RibbonManager ribbonManager;
+  
   TimelineManager(DataManager dataManager, Integer x, Integer y, Integer w, Integer h) {
     this.dataManager = dataManager;
     this.x = x;
@@ -22,6 +24,8 @@ public class TimelineManager {
     
     leftSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, 0, Integer.valueOf(-5)); 
     rightSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, dataManager.getYearsInOrder().size() - 1, Integer.valueOf(5));
+    
+    ribbonManager = new RibbonManager(dataManager, dataManager.getYearsInOrder(), x, y, w, h);
   }
   
   public void update() {
@@ -38,6 +42,7 @@ public class TimelineManager {
   }
   
   public void render() {
+    ribbonManager.render(leftSlider.getYear(), rightSlider.getYear());
     rightSlider.render();
     leftSlider.render();
     
