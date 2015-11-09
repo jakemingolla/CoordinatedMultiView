@@ -64,6 +64,7 @@ void setup() {
   //  }
   //  println(dataPoints.size());
   dataManager = new DataManager(dataPoints);
+  dataManager.getTimelineData();
   pieChartManager = new PieChartManager(dataManager, rightX, rightY, rightW, rightH);
   timelineManager = new TimelineManager(dataManager, topX, topY, topW, topH);
 
@@ -81,13 +82,16 @@ void setup() {
 
 
 void draw() {
+  timelineManager.update();
   background(200);
   fill(255);
   rect(topX, topY, topW, topH);
   rect(leftX, leftY, leftW, leftH);
   rect(rightX, rightY, rightW, rightH);
   timelineManager.render();
-  pieChartManager.render(2011, 2012);
+  Integer lowerBound = timelineManager.getLowerBoundYear();
+  Integer upperBound = timelineManager.getUpperBoundYear();
+  pieChartManager.render(lowerBound, upperBound);
 }
 
 void parse() {

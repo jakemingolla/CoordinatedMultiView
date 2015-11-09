@@ -20,17 +20,31 @@ public class TimelineManager {
     upperBound = -1;
     margin = 15;
     
-    leftSlider = null;
-    rightSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h);
+    leftSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, 0, Integer.valueOf(-5)); 
+    rightSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, dataManager.getYearsInOrder().size() - 1, Integer.valueOf(5));
+  }
+  
+  public void update() {
+    leftSlider.update();
+    rightSlider.update();
+  }
+  
+  public Integer getLowerBoundYear() {
+    return leftSlider.getYear();
+  }
+  
+  public Integer getUpperBoundYear() {
+    return rightSlider.getYear();
   }
   
   public void render() {
     rightSlider.render();
+    leftSlider.render();
     
     pushStyle();
     fill(0, 0, 255);
     List<Integer> yearsInOrder = dataManager.getYearsInOrder();
-    Integer xOffset = w / yearsInOrder.size();
+    Integer xOffset = (w) / (yearsInOrder.size() - 1);
     Integer year;
     for (Integer i = 0; i < yearsInOrder.size(); i++) {
       year = yearsInOrder.get(i);
