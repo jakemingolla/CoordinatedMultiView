@@ -70,15 +70,15 @@ void setup() {
   pieChartManager = new PieChartManager(dataManager, rightX, rightY, rightW, rightH);
   timelineManager = new TimelineManager(dataManager, topX, topY, topW, topH);
 
-//  Map<String, Float> pcd = dataManager.getPieChartData(2011, 2011);
-//  Float total = 0.0f;
-//  for (Entry<String, Float> entry : pcd.entrySet ()) {
-//    String sponsor = entry.getKey();
-//    Float percentage = entry.getValue();
-//    println("sponsor: " + sponsor + ", percentage: " + percentage);
-//    total += percentage;
-//  }
-//  println("total = " + total);
+  //  Map<String, Float> pcd = dataManager.getPieChartData(2011, 2011);
+  //  Float total = 0.0f;
+  //  for (Entry<String, Float> entry : pcd.entrySet ()) {
+  //    String sponsor = entry.getKey();
+  //    Float percentage = entry.getValue();
+  //    println("sponsor: " + sponsor + ", percentage: " + percentage);
+  //    total += percentage;
+  //  }
+  //  println("total = " + total);
 }
 
 
@@ -94,7 +94,7 @@ void draw() {
   Integer lowerBound = timelineManager.getLowerBoundYear();
   Integer upperBound = timelineManager.getUpperBoundYear();
   pieChartManager.render(lowerBound, upperBound);
-  loadPixels();
+  timelineManager.ribbonManager.updateFrameCounter();
 }
 
 void parse() {
@@ -112,12 +112,33 @@ void parse() {
   }
 }
 
-void mouseClicked() {
-  final color c = pixels[mouseY*width + mouseX];
-  println(hue(c) + "\t" + saturation(c)+ "\t" + brightness(c) + "r = " + red(c) + ", g = " + green(c) + ", b = " + blue(c));
-  if (mouseX > topX && mouseX < topX + topW && mouseY > topY && mouseY < topY + topH) {
-    DISPLAYED_DEPARTMENT = timelineManager.ribbonManager.getDepartmentByColor(c);
-    println(DISPLAYED_DEPARTMENT);
+void keyPressed() {
+  if (key == CODED && keyCode == LEFT) {
+    timelineManager.currentSlider.goLeft();
+    if (timelineManager.leftSlider.currentIndex > timelineManager.currentSlider.currentIndex) {
+      timelineManager.leftSlider.goLeft();
+    }
+  }
+  if (key == CODED && keyCode == RIGHT) {
+    timelineManager.currentSlider.goRight();
+    if (timelineManager.rightSlider.currentIndex < timelineManager.currentSlider.currentIndex) {
+      timelineManager.rightSlider.goRight();
+    }
+  }
+
+  if (key == CODED && keyCode == DOWN) {
+    if (timelineManager.ribbonManager.highlightedIndex < timelineManager.ribbonManager.disciplineList.size() - 1) {
+      timelineManager.ribbonManager.highlightedIndex += 1;
+    }
+  }
+
+  if (key == CODED && keyCode == UP) {
+    if (timelineManager.ribbonManager.highlightedIndex > 0) {
+      timelineManager.ribbonManager.highlightedIndex -= 1;
+    }
+  }
+  if (key == ' ') {
+    timelineManager.swapCurrentSlider();
   }
 }
 

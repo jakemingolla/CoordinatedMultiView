@@ -6,7 +6,11 @@ public class RibbonManager {
   List<String> disciplineList;
   Map<String, List<String>> departmentsByDiscipline;
   List<Integer> disciplineColorList;
+  List<String> orderedDisciplineList;
   Float xOffset;
+  Integer frameCounter;
+  boolean fcIncreasing;
+  Integer highlightedIndex;
   RibbonManager(DataManager dataManager, List<Integer> yearsInOrder, Integer x, Integer y, Integer w, Integer h) {
     this.dataManager = dataManager;
     this.x = x;
@@ -15,10 +19,15 @@ public class RibbonManager {
     this.h = h;
     ribbonList = dataManager.getRibbonList();
     disciplineList = dataManager.getDisciplineList();
+    orderedDisciplineList = createOrderedDisciplineList();
     departmentsByDiscipline = dataManager.getDepartmentsByDiscipline();
     this.yearsInOrder = yearsInOrder;
 
     setColors();
+    frameCounter = 0;
+    fcIncreasing = true;
+    highlightedIndex = 0;
+
     xOffset = (float)((w + yearsInOrder.size()) / (yearsInOrder.size() - 1)); // offset for floating point difference
   }
 
@@ -39,6 +48,10 @@ public class RibbonManager {
   }
 
   public void render(Integer lowerBound, Integer upperBound) {
+    println("DISCIPLINELIST:");
+    for (String d : orderedDisciplineList) {
+      println("     " + d);
+    }
     if (keyPressed && key == 'c') {
       setColors();
       for (Ribbon r : ribbonList) {
@@ -64,8 +77,11 @@ public class RibbonManager {
         y2 = (float)y;
         int j;
         int ribbonLength = ribbonList.size();
+        println("RIBBONS:");
         for (j = 0; j < ribbonLength; j++) {
           Ribbon r1 = ribbonList.get(j);
+          println("    " + r1.discipline);
+
           x3 = x1;
           y3 = y1 + (h * r1.percentages.get(i));
           x4 = x2;
@@ -77,10 +93,17 @@ public class RibbonManager {
             setHighC(r1);
           }
           if (year >= lowerBound && year < upperBound) {
-            fill(r1.highc);
+            if (r1.discipline.equals(orderedDisciplineList.get(highlightedIndex))) {
+              fill(r1.highc, frameCounter % 255);
+            } else {
+              fill(r1.highc);
+            }
           } else {
-
-            fill(r1.c);
+            if (r1.discipline.equals(orderedDisciplineList.get(highlightedIndex))) {
+              fill(r1.c, frameCounter % 255);
+            } else {
+              fill(r1.c);
+            }
           }
 
 
@@ -135,6 +158,36 @@ public class RibbonManager {
       }
     }
     return "NOT FOUND";
+  }
+
+  public void updateFrameCounter() {
+    final Integer DELTA = 5;
+    if (frameCounter >= 255 - DELTA) {
+      fcIncreasing = false;
+    } else if (frameCounter <= 0 + DELTA) {
+      fcIncreasing = true;
+    }
+    if (fcIncreasing) {
+      frameCounter += DELTA;
+    } else {
+      frameCounter -= DELTA;
+    }
+  }
+
+  public List<String> createOrderedDisciplineList() {
+    List<String> ordered = new ArrayList<String>();
+    for (Ribbon ribbon : ribbonList) {
+      boolean found = false;
+      for (String discipline : ordered) {
+        if (discipline.equals(ribbon.discipline)) {
+          found = true;
+        }
+      }
+      if (!found) {
+        ordered.add(ribbon.discipline);
+      }
+    }
+    return ordered;
   }
 }
 

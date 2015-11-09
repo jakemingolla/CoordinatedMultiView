@@ -8,6 +8,7 @@ public class TimelineManager {
   
   Slider leftSlider;
   Slider rightSlider;
+  public Slider currentSlider;
   
   RibbonManager ribbonManager;
   
@@ -24,6 +25,9 @@ public class TimelineManager {
     
     leftSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, 0, Integer.valueOf(-5)); 
     rightSlider = new Slider(dataManager.getYearsInOrder(), x, y, w, h, dataManager.getYearsInOrder().size() - 1, Integer.valueOf(5));
+    currentSlider = leftSlider;
+    leftSlider.current = true;
+    rightSlider.current = false;
     
     ribbonManager = new RibbonManager(dataManager, dataManager.getYearsInOrder(), x, y, w, h);
   }
@@ -39,6 +43,16 @@ public class TimelineManager {
   
   public Integer getUpperBoundYear() {
     return rightSlider.getYear();
+  }
+  
+  public void swapCurrentSlider() {
+    if (rightSlider.current) {
+      currentSlider = leftSlider;
+    } else {
+      currentSlider = rightSlider;
+    }
+    leftSlider.current = !leftSlider.current;
+    rightSlider.current = !rightSlider.current;
   }
   
   public void render() {

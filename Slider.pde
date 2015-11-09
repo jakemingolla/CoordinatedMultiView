@@ -8,6 +8,7 @@ public class Slider {
   final Integer SLIDER_R = 10;
   Boolean dragging;
   Integer currentIndex;
+  Boolean current;
 
   Slider(List<Integer> yearsInOrder, Integer x, Integer y, Integer w, Integer h, Integer startingIndex, Integer intersectOffset) {
     this.x = x;
@@ -19,12 +20,16 @@ public class Slider {
     currentIndex = startingIndex;
     currentX = x + startingIndex * xOffset + intersectOffset;
     dragging = false;
+    current = false;
   }
 
   public void render() {
     pushStyle();
     fill(SLIDER_COLOR);
     stroke(SLIDER_COLOR);
+    if (current) {
+      strokeWeight(10);
+    }
     ellipse(currentX, y, SLIDER_R, SLIDER_R);
     ellipse(currentX, y + h, SLIDER_R, SLIDER_R);
     line(currentX, y, currentX, y + h);
@@ -44,6 +49,20 @@ public class Slider {
         currentX += xOffset;
         currentIndex++;
       }
+    }
+  }
+
+  public void goLeft() {
+    if (currentIndex > 0) {
+      currentIndex --;
+      currentX -= xOffset;
+    }
+  }
+
+  public void goRight() {
+    if (currentIndex < yearsInOrder.size()) {
+      currentIndex ++;
+      currentX += xOffset;
     }
   }
 
