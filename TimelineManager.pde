@@ -63,7 +63,14 @@ public class TimelineManager {
     pushStyle();
     fill(0, 0, 255);
     List<Integer> yearsInOrder = dataManager.getYearsInOrder();
-    Integer xOffset = (w) / (yearsInOrder.size() - 1);
+    Integer xOffset;
+    
+    if (yearsInOrder.size() == 1) {
+      xOffset = w;
+    } else {
+      xOffset = (w) / (yearsInOrder.size() - 1);
+    }
+
     Integer year;
     for (Integer i = 0; i < yearsInOrder.size (); i++) {
       year = yearsInOrder.get(i);

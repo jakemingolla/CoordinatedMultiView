@@ -16,7 +16,11 @@ public class Slider {
     this.w = w;
     this.h = h;
     this.yearsInOrder = yearsInOrder;
-    xOffset = w / (yearsInOrder.size() - 1);
+    if (yearsInOrder.size() <= 1) {
+      xOffset = w;
+    } else {
+      xOffset = w / (yearsInOrder.size() - 1);
+    }
     currentIndex = startingIndex;
     currentX = x + startingIndex * xOffset + intersectOffset;
     dragging = false;

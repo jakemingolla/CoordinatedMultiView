@@ -37,6 +37,19 @@ public class PieChart {
     for (Slice s : slices) {
       s.render();
     }
+    makeToolTip();
+  }
+
+  public void makeToolTip() {
+    for (Slice s : slices) {
+      if (s.mouseOver()) {
+        pushStyle();
+        fill(0);
+        stroke(0);
+        text(SPONSOR + ": " + s.name + "\n" + TOTAL + " percentage: " + (100 * s.percentage) + "%", mouseX, mouseY - 20);
+        popStyle();
+      }
+    }
   }
 }
 

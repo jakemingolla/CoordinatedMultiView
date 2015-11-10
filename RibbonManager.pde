@@ -28,7 +28,11 @@ public class RibbonManager {
     fcIncreasing = true;
     highlightedIndex = 0;
 
-    xOffset = (float)((w + yearsInOrder.size()) / (yearsInOrder.size() - 1)); // offset for floating point difference
+    if (yearsInOrder.size() <= 1) {
+      xOffset = (float)w;
+    } else {
+      xOffset = (float)((w + yearsInOrder.size()) / (yearsInOrder.size() - 1)); // offset for floating point difference
+    }
   }
 
   public String getHighlightedDiscipline() {
@@ -59,13 +63,17 @@ public class RibbonManager {
         setHighC(r);
       }
     }
+
+
     if (ribbonList != null) {
       int i;
       int len = yearsInOrder.size() - 1;
 
       Float x1, x2, x3, x4, y1, y2, y3, y4;
 
-
+      if (len == 0) {
+        len = 1;
+      }
 
       for (i = 0; i < len; i++) {
 
@@ -83,7 +91,11 @@ public class RibbonManager {
           x3 = x1;
           y3 = y1 + (h * r1.percentages.get(i));
           x4 = x2;
-          y4 = y2 + (h * r1.percentages.get(i + 1));
+          if (len == 1) {
+            y4 = y2 + (h * r1.percentages.get(i));
+          } else {
+            y4 = y2 + (h * r1.percentages.get(i + 1));
+          }
 
           Integer year = yearsInOrder.get(i);
           if (r1.c.equals(-1)) {
@@ -103,7 +115,9 @@ public class RibbonManager {
 
           quad(x1, y1, x2, y2, x4, y4, x3, y3); // clockwise rotation
           currentPercentage1 += r1.percentages.get(i);
-          currentPercentage2 += r1.percentages.get(i + 1);
+          if (len != 1) {
+            currentPercentage2 += r1.percentages.get(i + 1);
+          }
           //println("year = " + year + " percentage = " + currentPercentage1);
           x1 = x3;
           x2 = x4;

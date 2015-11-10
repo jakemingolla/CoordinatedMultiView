@@ -19,7 +19,7 @@ String TOTAL;
 Integer MARGIN;
 Float MARGIN_RATIO = 0.05;
 
-String path = "soe-funding2.csv";
+String path = "soe-funding0.csv";
 List<Data> dataPoints;
 DataManager dataManager;
 PieChartManager pieChartManager;
