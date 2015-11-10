@@ -19,7 +19,7 @@ String TOTAL;
 Integer MARGIN;
 Float MARGIN_RATIO = 0.05;
 
-String path = "soe-funding0.csv";
+String path = "soe-funding2.csv";
 List<Data> dataPoints;
 DataManager dataManager;
 PieChartManager pieChartManager;
@@ -107,6 +107,42 @@ void draw() {
   barGraphManager.render();
   pieChartManager.update(lowerBound, upperBound);
   pieChartManager.render();
+
+  if (keyPressed && keyCode == SHIFT) {
+    filter(BLUR, 6);
+    List<String> disciplines = new ArrayList<String>();
+    List<Integer> colors = new ArrayList<Integer>();
+    for (Ribbon r : timelineManager.ribbonManager.ribbonList) {
+      boolean found = false;
+      Integer foundC;
+      String foundD;
+      for (String discipline : disciplines) {
+        if (discipline.equals(r.discipline)) {
+          found = true;
+        }
+      }
+      if (!found) {
+        disciplines.add(r.discipline);
+        colors.add(r.c);
+      }
+    }
+
+    pushStyle();
+    textSize(20);
+    fill(255);
+    rect((width/2) - 250, 100, 500, 500);
+    Integer xStart = (width/2) - 180;
+    Integer yStart = 150;
+    for (int i = 0; i < disciplines.size (); i++) {
+      String discipline = disciplines.get(i);
+      Integer c = colors.get(i);
+      fill(c);
+      rect(xStart, yStart + (500 / disciplines.size()) * i, 50, 50);
+      fill(0);
+      text(discipline, xStart + 80, yStart + 30 + (500 / disciplines.size()) * i);
+    }
+    popStyle();
+  }
 }
 
 void parse() {

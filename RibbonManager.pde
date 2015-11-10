@@ -56,6 +56,7 @@ public class RibbonManager {
   }
 
   public void render(Integer lowerBound, Integer upperBound) {
+    
     if (keyPressed && key == 'c') {
       setColors();
       for (Ribbon r : ribbonList) {
@@ -126,6 +127,7 @@ public class RibbonManager {
         }
       }
     }
+
   }
 
   public void setColors() {
