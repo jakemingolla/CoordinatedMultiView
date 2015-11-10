@@ -27,11 +27,10 @@ public class PieChartManager {
     Integer min = min(w, h);
     margin = 15;
     this.pieChart = new PieChart(x + (w / 2), y + (h / 2), min - margin, min - margin);
-
   } 
 
-  public void render(Integer lowerBound, Integer upperBound) {
-    if (lowerBound != currentLowerBound || upperBound != currentUpperBound) {
+  public void update(Integer lowerBound, Integer upperBound) {
+    if (lowerBound != currentLowerBound || upperBound != currentUpperBound || keyPressed && key == 'c' || keyPressed && keyCode == UP || keyPressed && keyCode == DOWN) {
       currentMap = dataManager.getPieChartData(lowerBound, upperBound);
       currentLowerBound = lowerBound;
       currentUpperBound = upperBound;
@@ -41,14 +40,19 @@ public class PieChartManager {
         currentNames.add(entry.getKey());
         currentPercentages.add(entry.getValue());
       }
+
+      pieChart.update(currentNames, currentPercentages);
     }
+  }
+
+  public void render() {
 
     if (currentLowerBound.equals(currentUpperBound)) {
-      fill(0, 0, 255);
-      text("Funding by Sponsor in " + currentLowerBound, x + margin, y + margin);
+      fill(0, 0, 0);
+      text(TOTAL + " by " + SPONSOR + " in " + currentLowerBound, x + margin, y + margin);
     } else {
-      fill(0, 0, 255);
-      text("Funding by Sponsor from " + currentLowerBound + " - " + currentUpperBound, x + margin, y + margin);
+      fill(0, 0, 0);
+      text(TOTAL + " by " + SPONSOR + " from " + currentLowerBound + " - " + currentUpperBound, x + margin, y + margin);
     }
     pieChart.render(currentNames, currentPercentages);
   }

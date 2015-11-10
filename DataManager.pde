@@ -26,7 +26,7 @@ public class DataManager {
   // Ribbon info
   Map<String, List<String>> departmentsByDiscipline;
 
-    Integer grandTotal;
+  Integer grandTotal;
 
   DataManager(List<Data> rawData) {
     this.rawData = rawData;
@@ -126,6 +126,32 @@ public class DataManager {
      */
   }
 
+  public List<Data> getBarGraphData(Integer lowerBound, Integer upperBound, String discipline) {
+    List<Data> barGraphData = new ArrayList<Data>();
+
+    for (Data d : rawData) {
+      if (d.discipline.equals(discipline) && (d.year >= lowerBound && d.year <= upperBound)) {
+        Boolean youngFound = false;
+        for (Data found : barGraphData) {
+          if (found.department.equals(d.department)) {
+            found.funding += d.funding;
+            youngFound = true;
+          }
+        }
+        if (!youngFound) {
+          Data newData = new Data();
+          newData.funding = d.funding;
+          newData.department = d.department;
+          newData.discipline = d.discipline;
+          newData.sponsor = d.sponsor;
+          newData.year = d.year;
+          barGraphData.add(newData);
+        }
+      }
+    }
+    return barGraphData;
+  }
+
   public List<Ribbon> getRibbonList() {
     List<Ribbon> ribbonList = new ArrayList<Ribbon>();
     for (List<YearlyDonationsByDiscipline> l : donationsByYearByDiscipline) {
@@ -156,17 +182,17 @@ public class DataManager {
       }
     }
 
-//    for (Ribbon ribbon : ribbonList) {
-//      println("discipline = " + ribbon.discipline + ", department = " + ribbon.department + " {");
-//      int i;
-//      int len = ribbon.years.size();
-//      for (i = 0; i < len; i++) {
-//        Integer year = ribbon.years.get(i);
-//        Float percentage = ribbon.percentages.get(i);
-//        println("      year = " + year + ", percentage = " + percentage * 100);
-//      }
-//      println("}");
-//    }
+    //    for (Ribbon ribbon : ribbonList) {
+    //      println("discipline = " + ribbon.discipline + ", department = " + ribbon.department + " {");
+    //      int i;
+    //      int len = ribbon.years.size();
+    //      for (i = 0; i < len; i++) {
+    //        Integer year = ribbon.years.get(i);
+    //        Float percentage = ribbon.percentages.get(i);
+    //        println("      year = " + year + ", percentage = " + percentage * 100);
+    //      }
+    //      println("}");
+    //    }
     return ribbonList;
   }
 
@@ -201,19 +227,27 @@ public class DataManager {
       for (Entry<String, Integer> entry : map.entrySet ()) {
         String sponsor = entry.getKey(); 
         Integer funding = entry.getValue(); 
-        pieInitialChartData.put(sponsor, funding); 
+        Integer currentFunding = pieInitialChartData.get(sponsor);
+        if (currentFunding == null) {
+          pieInitialChartData.put(sponsor, funding);
+        } else {
+          pieInitialChartData.put(sponsor, currentFunding + funding);
+        }
         sum += funding;
+        println("funding = " + funding);
+        println("sum = " + sum);
       }
     }
 
     Map<String, Float> percentages = new HashMap<String, Float>(); 
-
+    Float runningSum = 0.0f;
     for (Entry<String, Integer> entry : pieInitialChartData.entrySet ()) {
       String sponsor = entry.getKey(); 
       Integer funding = entry.getValue(); 
       percentages.put(sponsor, ((float)funding / (float)sum));
+      runningSum += ((float)funding / (float)sum);
+      println("RUNNING SUM = " + runningSum);
     }
-
     return percentages;
   }
 
@@ -238,5 +272,7 @@ public class DataManager {
     }
     return false;
   }
+
+  //public List<
 }
 

@@ -10,14 +10,21 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+String DISCIPLINE;
+String DEPARTMENT;
+String SPONSOR;
+String YEAR;
+String TOTAL;
+
 Integer MARGIN;
 Float MARGIN_RATIO = 0.05;
 
-String path = "soe-funding.csv";
+String path = "soe-funding2.csv";
 List<Data> dataPoints;
 DataManager dataManager;
 PieChartManager pieChartManager;
 TimelineManager timelineManager;
+BarGraphManager barGraphManager;
 
 Integer topX;
 Integer topY;
@@ -69,6 +76,7 @@ void setup() {
   dataManager.getRibbonList();
   pieChartManager = new PieChartManager(dataManager, rightX, rightY, rightW, rightH);
   timelineManager = new TimelineManager(dataManager, topX, topY, topW, topH);
+  barGraphManager = new BarGraphManager(dataManager, timelineManager.ribbonManager, leftX, leftY, leftW, leftH);
 
   //  Map<String, Float> pcd = dataManager.getPieChartData(2011, 2011);
   //  Float total = 0.0f;
@@ -93,13 +101,22 @@ void draw() {
   timelineManager.render();
   Integer lowerBound = timelineManager.getLowerBoundYear();
   Integer upperBound = timelineManager.getUpperBoundYear();
-  pieChartManager.render(lowerBound, upperBound);
+
   timelineManager.ribbonManager.updateFrameCounter();
+  barGraphManager.update(lowerBound, upperBound, timelineManager.ribbonManager.getHighlightedDiscipline());
+  barGraphManager.render();
+  pieChartManager.update(lowerBound, upperBound);
+  pieChartManager.render();
 }
 
 void parse() {
   String[] fileLines = loadStrings(path);
-  String[] currLine;
+  String[] currLine = split(fileLines[0], ",");
+  DISCIPLINE = currLine[0];
+  DEPARTMENT = currLine[1];
+  SPONSOR = currLine[2];
+  YEAR = currLine[3];
+  TOTAL = currLine[4];
   for (int i = 1; i < fileLines.length; i++) {
     currLine = split(fileLines[i], ",");
     Data data = new Data();

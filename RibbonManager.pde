@@ -31,6 +31,10 @@ public class RibbonManager {
     xOffset = (float)((w + yearsInOrder.size()) / (yearsInOrder.size() - 1)); // offset for floating point difference
   }
 
+  public String getHighlightedDiscipline() {
+    return orderedDisciplineList.get(highlightedIndex);
+  }
+
   float tintFactor = 0.5f;
 
   public void setHighC(Ribbon r) {
@@ -48,10 +52,6 @@ public class RibbonManager {
   }
 
   public void render(Integer lowerBound, Integer upperBound) {
-    println("DISCIPLINELIST:");
-    for (String d : orderedDisciplineList) {
-      println("     " + d);
-    }
     if (keyPressed && key == 'c') {
       setColors();
       for (Ribbon r : ribbonList) {
@@ -77,10 +77,8 @@ public class RibbonManager {
         y2 = (float)y;
         int j;
         int ribbonLength = ribbonList.size();
-        println("RIBBONS:");
         for (j = 0; j < ribbonLength; j++) {
           Ribbon r1 = ribbonList.get(j);
-          println("    " + r1.discipline);
 
           x3 = x1;
           y3 = y1 + (h * r1.percentages.get(i));
@@ -99,11 +97,7 @@ public class RibbonManager {
               fill(r1.highc);
             }
           } else {
-            if (r1.discipline.equals(orderedDisciplineList.get(highlightedIndex))) {
-              fill(r1.c, frameCounter % 255);
-            } else {
-              fill(r1.c);
-            }
+            fill(r1.c);
           }
 
 
@@ -161,7 +155,7 @@ public class RibbonManager {
   }
 
   public void updateFrameCounter() {
-    final Integer DELTA = 5;
+    final Integer DELTA = 8;
     if (frameCounter >= 255 - DELTA) {
       fcIncreasing = false;
     } else if (frameCounter <= 0 + DELTA) {

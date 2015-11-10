@@ -11,26 +11,26 @@ public class YearlyDonationsByDiscipline {
   Integer grandTotal;
   List<String> departments;
   List<Integer> values;
-  
+
   YearlyDonationsByDiscipline(Integer year, String discipline, List<String> departments) {
-                                
-                                this.year = year;
-                                this.discipline = discipline;
-                                this.disciplineTotal = 0;
-                                this.grandTotal = 0;
-                                this.departments = departments;
-                                this.values = new ArrayList<Integer>();
+
+    this.year = year;
+    this.discipline = discipline;
+    this.disciplineTotal = 0;
+    this.grandTotal = 0;
+    this.departments = departments;
+    this.values = new ArrayList<Integer>();
   }
- 
-  
+
+
   public void addValue(String deptName, Integer value) {
     int i;
-    for (i = 0; i < departments.size(); i++) {
+    for (i = 0; i < departments.size (); i++) {
       if (departments.get(i).equals(deptName)) {
         break;
       }
     }
-    
+
     if (i < values.size()) {
       values.set(i, values.get(i) + value);
     } else {
@@ -38,9 +38,9 @@ public class YearlyDonationsByDiscipline {
     }
     disciplineTotal += value;
   }
-  
+
   public void setGrandTotal(Integer total) {
     grandTotal = total;
   }
-  
 }
+

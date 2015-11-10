@@ -60,7 +60,7 @@ public class Slider {
   }
 
   public void goRight() {
-    if (currentIndex < yearsInOrder.size()) {
+    if (currentIndex < yearsInOrder.size() - 1) {
       currentIndex ++;
       currentX += xOffset;
     }
